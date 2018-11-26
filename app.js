@@ -14,14 +14,41 @@ var budgetController = (function() {
 
     var data = {
         allItems: {
-            exp: [],
-            inc: []
+            expense: [],
+            income: []
         },
         totals: {
-            exp: 0,
-            inc: 0
+            expense: 0,
+            income: 0
         }
     };
+
+    return {
+        addItem: function(type, des, val) {
+            var newItem, ID;
+
+            if (data.allItems[type].length > 0) {
+                ID = data.allItems[type][data.allItems[type].length - 1].id + 1;    
+            } else {
+                ID = 0;
+            }
+
+
+            if (type === 'expense') {
+                newItem = new Expense(ID, des, val);
+            } else if (type === 'income') {
+                newItem = new Income(ID, des, val);
+            }
+
+            data.allItems[type].push(newItem);
+
+            return newItem;
+        },
+
+        testing: function() {
+            console.log(data);
+        }
+    }
 
 })();
 
@@ -73,9 +100,12 @@ var controller = (function(budgetCntrl, UICntrl) {
 
 
     var cntrlAddItem = function() {
-        var input = UICntrl.getInput();
-        console.log(input)
-    }
+
+        var input, newItem;
+
+        input = UICntrl.getInput();
+        newItem = budgetCntrl.addItem(input.type, input.description, input.val)
+    }       
 
     return {
         init: function() {
