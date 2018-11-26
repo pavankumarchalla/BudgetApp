@@ -70,7 +70,7 @@ var UIController = (function() {
             return {
                 type: document.querySelector(DOMStrings.inputType).value,
                 description: document.querySelector(DOMStrings.inputDescription).value,
-                value: document.querySelector(DOMStrings.inputValue).value
+                value: parseFloat(document.querySelector(DOMStrings.inputValue).value)
             };
 
         },
@@ -136,18 +136,29 @@ var controller = (function(budgetCntrl, UICntrl) {
         });
     }
 
+    var updateBudget = function() {
+
+    }
+
 
     var cntrlAddItem = function() {
 
         var input, newItem;
 
         input = UICntrl.getInput();
+
+        if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
+            
+            newItem = budgetCntrl.addItem(input.type, input.description, input.value);
+
+            UICntrl.addListItem(newItem, input.type);
+    
+            UICntrl.clearFields();
+    
+            updateBudget();
+        }
         
-        newItem = budgetCntrl.addItem(input.type, input.description, input.value);
-
-        UICntrl.addListItem(newItem, input.type);
-
-        UICntrl.clearFields();
+  
     }       
 
     return {
